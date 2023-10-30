@@ -1,5 +1,55 @@
 // ---- Define your dialogs  and panels here ----
+let panel = define_new_effective_permissions("panel", true, null)
 
+//create heading and instructions
+let permissions_title = document.createElement('b')
+permissions_title.append("Permissions")
+$('#sidepanel').append(permissions_title)
+$('#sidepanel').append(document.createElement('br'))
+
+$('#sidepanel').append("Select a user below and click a file on the left to check permissions")
+
+//add panel, set attributes, and add user select button
+$('#sidepanel').append(panel)
+$('#panel').attr('filepath', '/C')
+
+let new_user = define_new_user_select_field("new_user", "Select User", function(selected_user){
+    $('#panel').attr('username', selected_user)
+})
+$('#sidepanel').append(new_user)
+
+let new_dialog = define_new_dialog('new_dialog', '')
+
+$('.perm_info').click(function(){
+    //open and empty dialog of prev info
+    new_dialog.dialog('open')
+    $('#new_dialog').empty()
+
+    // get the panel filepath, user, permission name, and if it is allowed
+    let my_file_obj = path_to_file[$('#panel').attr('filepath')]
+    let username = all_users[$('#panel').attr('username')]
+    let perm_attribute = this.getAttribute("permission_name")
+    let display_user = allow_user_action(my_file_obj, username, perm_attribute, true)
+
+    //get and add the permission name and if it is allowed to the panel
+    let permission_append_title = document.createElement('b')
+    permission_append_title.append("Permission Name: ")
+    let permission_append_name = document.createElement('p')
+    permission_append_name.append(perm_attribute)
+
+    let allowed_append_title = document.createElement('b')
+    allowed_append_title.append("Access Allowed: ")
+    let allowed_append_name = document.createElement('p')
+    allowed_append_name.append(display_user.is_allowed)
+
+    new_dialog.append(permission_append_title, permission_append_name);
+    new_dialog.append(allowed_append_title, allowed_append_name);
+
+    //add the explanation text
+    let explanation_append_title = document.createElement('b')
+    explanation_append_title.append("Explanation: ")
+    $('#new_dialog').append(get_explanation_text(display_user))
+})
 
 
 // ---- Display file structure ----
@@ -70,5 +120,7 @@ $('.permbutton').click( function( e ) {
 });
 
 
+
 // ---- Assign unique ids to everything that doesn't have an ID ----
 $('#html-loc').find('*').uniqueId() 
+

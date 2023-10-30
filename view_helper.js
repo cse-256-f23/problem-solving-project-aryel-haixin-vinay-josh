@@ -503,11 +503,12 @@ function define_new_user_select_field(id_prefix, select_button_text, on_user_cha
 
 // Get a (very simple) text representation of a permissions explanation
 function get_explanation_text(explanation) {
+    let allowed = explanation.is_allowed? "Action is allowed because ": "Action is NOT allowed because "
+
     return `
-    Action allowed?: ${explanation.is_allowed}; 
-    Because of
-    permission set for file: ${explanation.file_responsible?get_full_path(explanation.file_responsible):'N/A'}
-    and for user: ${ explanation.ace_responsible ? get_user_name(explanation.ace_responsible.who) : 'N/A' }
+    ${allowed}
+    ${explanation.file_responsible?"file " + get_full_path(explanation.file_responsible) + "'s permission is set ":"file's permission is not set " }
+    and ${ explanation.ace_responsible ? "user " + get_user_name(explanation.ace_responsible.who) + "'s permission is set" : "user's permissions is not set " }
     ${ explanation.text_explanation ? `(${explanation.text_explanation})`  : '' }
     `
 }
