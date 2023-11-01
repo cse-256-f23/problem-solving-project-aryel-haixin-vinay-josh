@@ -1,55 +1,91 @@
 // ---- Define your dialogs  and panels here ----
-let panel = define_new_effective_permissions("panel", true, null)
+
+//count for the number of panels, so that the ids are different
+let panelCount = 0;
 
 //create heading and instructions
 let permissions_title = document.createElement('b')
 permissions_title.append("Permissions")
 $('#sidepanel').append(permissions_title)
 $('#sidepanel').append(document.createElement('br'))
+$('#sidepanel').append("Select a user below and click a file on the left to check permissions. Another panel can be opened by clicking the 'Create New Panel' Button below. The two panels will be set to the same file, but the user can be changed to compare their permissions.")
 
-$('#sidepanel').append("Select a user below and click a file on the left to check permissions")
+//create new permissions panel button
+let newPermissionsPanelButton = document.createElement('button')
+newPermissionsPanelButton.id = "newPermissionsPanelButton"
+newPermissionsPanelButton.textContent = "Create New Panel"
+$('#sidepanel').append(newPermissionsPanelButton)
+
+// Add permissions word to button
+$('permbutton').append("File Permissions");
 
 //add panel, set attributes, and add user select button
-$('#sidepanel').append(panel)
-$('#panel').attr('filepath', '/C')
+function createNewPermissionsPanel(){
+    panelCount++;
+    let panel = define_new_effective_permissions("panel" + panelCount, true, null)
+    $('#sidepanel').append(panel)
 
-let new_user = define_new_user_select_field("new_user", "Select User", function(selected_user){
-    $('#panel').attr('username', selected_user)
+    let new_user = define_new_user_select_field("new_user", "Select User", function(selected_user){
+        $('#panel').attr('username', selected_user)
+    })
+    $('#sidepanel').append(new_user)
+
+    let new_dialog = define_new_dialog('new_dialog', '')
+
+    $('.perm_info').click(function(){
+        //open and empty dialog of prev info
+        new_dialog.dialog('open')
+        $('#new_dialog').empty()
+
+        // get the panel filepath, user, permission name, and if it is allowed
+        let my_file_obj = path_to_file[$('#panel'+panelCount).attr('filepath')]
+        let username = all_users[$('#panel'+panelCount).attr('username')]
+        let perm_attribute = this.getAttribute("permission_name")
+        let display_user = allow_user_action(my_file_obj, username, perm_attribute, true)
+
+        //get and add the permission name and if it is allowed to the panel
+        let permission_append_title = document.createElement('b')
+        permission_append_title.append("Permission Name: ")
+        let permission_append_name = document.createElement('p')
+        permission_append_name.append(perm_attribute)
+
+        let allowed_append_title = document.createElement('b')
+        allowed_append_title.append("Access Allowed: ")
+        let allowed_append_name = document.createElement('p')
+        allowed_append_name.append(display_user.is_allowed)
+
+        new_dialog.append(permission_append_title, permission_append_name);
+        new_dialog.append(allowed_append_title, allowed_append_name);
+
+        //add the explanation text
+        let explanation_append_title = document.createElement('b')
+        explanation_append_title.append("Explanation: ")
+        $('#new_dialog').append(get_explanation_text(display_user))
+
+        //add spacing
+        $('#sidepanel').append(document.createElement('br'))
+    })
+}
+
+
+
+//button click function
+$('#newPermissionsPanelButton').click(function(){
+    createNewPermissionsPanel()
 })
-$('#sidepanel').append(new_user)
+//initialize the first panel
+createNewPermissionsPanel()
 
-let new_dialog = define_new_dialog('new_dialog', '')
-
-$('.perm_info').click(function(){
-    //open and empty dialog of prev info
-    new_dialog.dialog('open')
-    $('#new_dialog').empty()
-
-    // get the panel filepath, user, permission name, and if it is allowed
-    let my_file_obj = path_to_file[$('#panel').attr('filepath')]
-    let username = all_users[$('#panel').attr('username')]
-    let perm_attribute = this.getAttribute("permission_name")
-    let display_user = allow_user_action(my_file_obj, username, perm_attribute, true)
-
-    //get and add the permission name and if it is allowed to the panel
-    let permission_append_title = document.createElement('b')
-    permission_append_title.append("Permission Name: ")
-    let permission_append_name = document.createElement('p')
-    permission_append_name.append(perm_attribute)
-
-    let allowed_append_title = document.createElement('b')
-    allowed_append_title.append("Access Allowed: ")
-    let allowed_append_name = document.createElement('p')
-    allowed_append_name.append(display_user.is_allowed)
-
-    new_dialog.append(permission_append_title, permission_append_name);
-    new_dialog.append(allowed_append_title, allowed_append_name);
-
-    //add the explanation text
-    let explanation_append_title = document.createElement('b')
-    explanation_append_title.append("Explanation: ")
-    $('#new_dialog').append(get_explanation_text(display_user))
-})
+//click on a file to set the filepath for the panels
+$(document).on('click', '.file', function() {
+    //get filepath by removing the _div from the id
+    let filepath = $(this).attr('id').slice(0, -4);
+    console.log(filepath)
+    for(let i = 0; i < panelCount; ++i){
+        //set each panel's filepath
+        $('#panel'+panelCount).attr('filepath', filepath)
+    }
+});
 
 
 // ---- Display file structure ----
@@ -62,9 +98,12 @@ function make_file_element(file_obj) {
         let folder_elem = $(`<div class='folder' id="${file_hash}_div">
             <h3 id="${file_hash}_header">
                 <span class="oi oi-folder" id="${file_hash}_icon"/> ${file_obj.filename} 
-                <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
-                    <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
-                </button>
+                <span class="tooltip">
+                    <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
+                        <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
+                    </button>
+                    <span class="tooltipText" />
+                </span>
             </h3>
         </div>`)
 
@@ -82,9 +121,12 @@ function make_file_element(file_obj) {
     else {
         return $(`<div class='file'  id="${file_hash}_div">
             <span class="oi oi-file" id="${file_hash}_icon"/> ${file_obj.filename}
-            <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
-                <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
-            </button>
+            <span class="tooltip'>
+                <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
+                    <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
+                </button>
+                <span class="tooltipText" />
+            </span>
         </div>`)
     }
 }
@@ -120,7 +162,50 @@ $('.permbutton').click( function( e ) {
 });
 
 
+$('.tooltipText').html("test")
+
+// $('.permbutton').addClass("tooltip")
+
 
 // ---- Assign unique ids to everything that doesn't have an ID ----
 $('#html-loc').find('*').uniqueId() 
+ 
+// The "Are you sure Panel"
+function createConfirmationDialog(confirmCallback) {
+    let confirmationDialog = $("<div></div>")
+        .html("Are you sure?")
+        .dialog({
+            autoOpen: false,
+            modal: true,
+            buttons: {
+                "Yes": function () {
+                    $(this).dialog("close");
+                    confirmCallback(); // Call the callback function if the user clicks "Yes"
+                },
+                "No": function () {
+                    $(this).dialog("close");
+                    // You can add additional handling or leave it empty
+                }
+            }
+        });
+
+    return confirmationDialog;
+}
+$('.____idk').click(function() {
+    //Setting the path file and dialog
+    confirmDialog.dialog('open');
+    confirmDialog.data('confirmCallback', function () {
+    });
+});
+
+confirmDialog.dialog({
+    beforeClose: function (event, ui) {
+        let confirmCallback = confirmDialog.data('confirmCallback');
+        if (confirmCallback) {
+            confirmCallback();
+        }
+    }
+});
+
+
 
