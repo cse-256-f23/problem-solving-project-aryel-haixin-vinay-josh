@@ -20,26 +20,26 @@ $('#sidepanel').append(newPermissionsPanelButton)
 $('permbutton').append("File Permissions");
 
 //add panel, set attributes, and add user select button
-function createNewPermissionsPanel(){
+function createNewPermissionsPanel() {
     panelCount++;
     let panel = define_new_effective_permissions("panel" + panelCount, true, null)
     $('#sidepanel').append(panel)
 
-    let new_user = define_new_user_select_field("new_user", "Select User", function(selected_user){
+    let new_user = define_new_user_select_field("new_user", "Select User", function (selected_user) {
         $('#panel').attr('username', selected_user)
     })
     $('#sidepanel').append(new_user)
 
     let new_dialog = define_new_dialog('new_dialog', '')
 
-    $('.perm_info').click(function(){
+    $('.perm_info').click(function () {
         //open and empty dialog of prev info
         new_dialog.dialog('open')
         $('#new_dialog').empty()
 
         // get the panel filepath, user, permission name, and if it is allowed
-        let my_file_obj = path_to_file[$('#panel'+panelCount).attr('filepath')]
-        let username = all_users[$('#panel'+panelCount).attr('username')]
+        let my_file_obj = path_to_file[$('#panel' + panelCount).attr('filepath')]
+        let username = all_users[$('#panel' + panelCount).attr('username')]
         let perm_attribute = this.getAttribute("permission_name")
         let display_user = allow_user_action(my_file_obj, username, perm_attribute, true)
 
@@ -70,20 +70,20 @@ function createNewPermissionsPanel(){
 
 
 //button click function
-$('#newPermissionsPanelButton').click(function(){
+$('#newPermissionsPanelButton').click(function () {
     createNewPermissionsPanel()
 })
 //initialize the first panel
 createNewPermissionsPanel()
 
 //click on a file to set the filepath for the panels
-$(document).on('click', '.file', function() {
+$(document).on('click', '.file', function () {
     //get filepath by removing the _div from the id
     let filepath = $(this).attr('id').slice(0, -4);
     console.log(filepath)
-    for(let i = 0; i < panelCount; ++i){
+    for (let i = 0; i < panelCount; ++i) {
         //set each panel's filepath
-        $('#panel'+panelCount).attr('filepath', filepath)
+        $('#panel' + panelCount).attr('filepath', filepath)
     }
 });
 
@@ -94,7 +94,7 @@ $(document).on('click', '.file', function() {
 function make_file_element(file_obj) {
     let file_hash = get_full_path(file_obj)
 
-    if(file_obj.is_folder) {
+    if (file_obj.is_folder) {
         let folder_elem = $(`<div class='folder' id="${file_hash}_div">
             <h3 id="${file_hash}_header">
                 <span class="oi oi-folder" id="${file_hash}_icon"/> ${file_obj.filename} 
@@ -108,10 +108,10 @@ function make_file_element(file_obj) {
         </div>`)
 
         // append children, if any:
-        if( file_hash in parent_to_children) {
+        if (file_hash in parent_to_children) {
             let container_elem = $("<div class='folder_contents'></div>")
             folder_elem.append(container_elem)
-            for(child_file of parent_to_children[file_hash]) {
+            for (child_file of parent_to_children[file_hash]) {
                 let child_elem = make_file_element(child_file)
                 container_elem.append(child_elem)
             }
@@ -121,19 +121,19 @@ function make_file_element(file_obj) {
     else {
         return $(`<div class='file'  id="${file_hash}_div">
             <span class="oi oi-file" id="${file_hash}_icon"/> ${file_obj.filename}
-            <span class="tooltip'>
-                <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
-                    <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
-                </button>
-                <span class="tooltipText" />
-            </span>
+                </div>
+        <div class="tooltip">
+            <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
+                <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
+            </button>
+            <span class="tooltipText"></span>
         </div>`)
     }
 }
 
-for(let root_file of root_files) {
+for (let root_file of root_files) {
     let file_elem = make_file_element(root_file)
-    $( "#filestructure" ).append( file_elem);    
+    $("#filestructure").append(file_elem);
 }
 
 
@@ -148,7 +148,7 @@ $('.folder').accordion({
 // -- Connect File Structure lock buttons to the permission dialog --
 
 // open permissions dialog when a permission button is clicked
-$('.permbutton').click( function( e ) {
+$('.permbutton').click(function (e) {
     // Set the path and open dialog:
     let path = e.currentTarget.getAttribute('path');
     perm_dialog.attr('filepath', path)
@@ -158,18 +158,18 @@ $('.permbutton').click( function( e ) {
     // Deal with the fact that folders try to collapse/expand when you click on their permissions button:
     e.stopPropagation() // don't propagate button click to element underneath it (e.g. folder accordion)
     // Emit a click for logging purposes:
-    emitter.dispatchEvent(new CustomEvent('userEvent', { detail: new ClickEntry(ActionEnum.CLICK, (e.clientX + window.pageXOffset), (e.clientY + window.pageYOffset), e.target.id,new Date().getTime()) }))
+    emitter.dispatchEvent(new CustomEvent('userEvent', { detail: new ClickEntry(ActionEnum.CLICK, (e.clientX + window.pageXOffset), (e.clientY + window.pageYOffset), e.target.id, new Date().getTime()) }))
 });
 
 
-$('.tooltipText').html("test")
+$('.tooltipText').html("Click to Change Permission")
 
 // $('.permbutton').addClass("tooltip")
 
 
 // ---- Assign unique ids to everything that doesn't have an ID ----
-$('#html-loc').find('*').uniqueId() 
- 
+$('#html-loc').find('*').uniqueId()
+
 // The "Are you sure Panel"
 function createConfirmationDialog(confirmCallback) {
     let confirmationDialog = $("<div></div>")
@@ -191,7 +191,7 @@ function createConfirmationDialog(confirmCallback) {
 
     return confirmationDialog;
 }
-$('.____idk').click(function() {
+$('.____idk').click(function () {
     //Setting the path file and dialog
     confirmDialog.dialog('open');
     confirmDialog.data('confirmCallback', function () {

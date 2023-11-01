@@ -1,6 +1,6 @@
 .file {
     padding: 8;
-    border-bottom: 1px solid #dddddd;
+    /* border-bottom: 1px solid #dddddd; */
 }
 
 .section {
@@ -45,20 +45,25 @@ input[type='checkbox']:hover {
     display: none;
 }
 
-/* .tooltip .tooltiptext {
+.tooltip {
+    display: inline;
+}
+.tooltip .tooltipText {
     visibility: hidden;
-    width: 120px;
+    width: 150px;
+    height: 48px;
     background-color: black;
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    padding: 5px 0;
+    padding: 4px 0;
     position: absolute;
+    overflow:hidden;
+    display:inline;
     z-index: 1;
-    top: -5px;
-    left: 105%;
+    margin-left: 5px;
   }
 
-  .tooltip:hover .tooltiptext {
+  .tooltip:hover .tooltipText {
     visibility: visible;
-  } */
+  }
