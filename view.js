@@ -97,7 +97,11 @@ function make_file_element(file_obj) {
     if (file_obj.is_folder) {
         let folder_elem = $(`<div class='folder' id="${file_hash}_div">
             <h3 id="${file_hash}_header">
-                <span class="oi oi-folder" id="${file_hash}_icon"/> ${file_obj.filename} 
+                <span class="oi oi-folder" id="${file_hash}_icon"/> 
+                <div class="tooltip">
+                ${file_obj.filename} 
+                <span class="fileName tooltipText"></span>
+             </div>
                 <span class="tooltip">
                     <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
                         <span class="oi oi-lock-unlocked" id="${file_hash}_permicon"/> 
@@ -120,7 +124,11 @@ function make_file_element(file_obj) {
     }
     else {
         return $(`<div class='file'  id="${file_hash}_div">
-            <span class="oi oi-file" id="${file_hash}_icon"/> ${file_obj.filename}
+            <span class="oi oi-file" id="${file_hash}_icon"/>
+            <div class="tooltip">
+             ${file_obj.filename}
+             <span class="fileName tooltipText"></span>
+             </div>
                 </div>
         <div class="tooltip">
             <button class="ui-button ui-widget ui-corner-all permbutton" path="${file_hash}" id="${file_hash}_permbutton"> 
@@ -163,6 +171,7 @@ $('.permbutton').click(function (e) {
 
 
 $('.tooltipText').html("Click to Change Permission")
+$('.fileName').html("Click to View Permission on the Right")
 
 // $('.permbutton').addClass("tooltip")
 
