@@ -51,7 +51,7 @@ input[type='checkbox']:hover {
 .tooltip .tooltipText {
     text-align: center;
     visibility: hidden;
-    width: 110px;
+    width: 112px;
     height: 75px;
     background-color: black;
     color: #fff;
@@ -67,3 +67,7 @@ input[type='checkbox']:hover {
   .tooltip:hover .tooltipText {
     visibility: visible;
   }
+
+.perm_info {
+    cursor: pointer;
+}

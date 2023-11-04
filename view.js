@@ -172,6 +172,7 @@ $('.permbutton').click(function (e) {
 
 $('.tooltipText').html("Click to Change Permission")
 $('.fileName').html("Click to View Permission on the Right")
+$('.individual').html("click to check reasons for the given permission")
 
 // $('.permbutton').addClass("tooltip")
 
