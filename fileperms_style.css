@@ -71,3 +71,8 @@ input[type='checkbox']:hover {
 .perm_info {
     cursor: pointer;
 }
+
+.guide {
+    top: -70px;
+    position: relative;
+}
