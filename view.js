@@ -7,7 +7,7 @@ let file_selected = "";
 
 //create heading and instructions
 let permissions_title = document.createElement('b')
-permissions_title.append("Permissions")
+permissions_title.append("Effective Permissions")
 $('#sidepanel').append(permissions_title)
 $('#sidepanel').append(document.createElement('br'))
 $('#sidepanel').append("Select a user under the panel and click a file on the left to check their permissions. Another panel can be opened by clicking the 'Create New Panel' Button below. The two panels will be set to the same file, but the user can be changed to compare permissions.")
@@ -29,6 +29,19 @@ file_selected_display.id = "file_selected";
 file_selected_display.style = "width:100%"
 $('#sidepanel').append(file_selected_display)
 
+//create the change permissions button
+let change_permissions_button = document.createElement('button')
+change_permissions_button.id = "changePermissionsButton"
+change_permissions_button.textContent = "Edit Permissions"
+$('#sidepanel').append(document.createElement('br'))
+$('#sidepanel').append(change_permissions_button)
+$('#changePermissionsButton').click(function () {
+    if(file_selected != ""){
+        open_advanced_dialog(file_selected)
+    }
+})
+
+
 //add panel, set attributes, and add user select button
 function createNewPermissionsPanel() {
     panelCount++;
@@ -39,6 +52,7 @@ function createNewPermissionsPanel() {
         $('#panel' + currCount).attr('username', selected_user)
     })
     $('#sidepanel').append(new_user)
+
 
     //if a file is already selected
     if(file_selected != ""){
@@ -76,6 +90,7 @@ function createNewPermissionsPanel() {
         let explanation_append_title = document.createElement('b')
         explanation_append_title.append("Explanation: ")
         $('#new_dialog').append(get_explanation_text(display_user))
+
 
         //add spacing
         $('#sidepanel').append(document.createElement('br'))
