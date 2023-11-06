@@ -1,78 +1,86 @@
 .file {
-    padding: 8;
-    /* border-bottom: 1px solid #dddddd; */
+  padding: 8;
+  /* border-bottom: 1px solid #dddddd; */
 }
 
 .section {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
-.ui-selected { 
-    background: #007fff; 
-    color: white; 
+.ui-selected {
+  background: #007fff;
+  color: white;
 }
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    right: 0;
+  position: fixed;
+  bottom: 0;
+  right: 0;
 }
 
-input[type='checkbox']:hover {
-    cursor: pointer;
+input[type="checkbox"]:hover {
+  cursor: pointer;
 }
 
-.file:hover{
-    cursor: pointer;
-    text-decoration: underline;
+.file:hover {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 #mturk-top-banner-drop-down-content {
-    position: absolute;
-    width: 99%;
-    bottom: 0px;
-    top:unset;
-    left: 0;
-    background-color: #eee;
-    z-index: 100;
-    padding: 10px 10px 10px 10px;
-    border-left: 1px orange solid;
-    border-right: 1px orange solid;
-    border-top: 1px orange solid;
+  position: absolute;
+  width: 99%;
+  bottom: 0px;
+  top: unset;
+  left: 0;
+  background-color: #eee;
+  z-index: 100;
+  padding: 10px 10px 10px 10px;
+  border-left: 1px orange solid;
+  border-right: 1px orange solid;
+  border-top: 1px orange solid;
 }
 
 .no-close .ui-dialog-titlebar-close {
-    display: none;
+  display: none;
 }
 
 .tooltip {
-    display: inline;
+  display: inline;
 }
 .tooltip .tooltipText {
-    text-align: center;
-    visibility: hidden;
-    width: 112px;
-    height: 75px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 4px 0;
-    position: absolute;
-    display:inline;
-    z-index: 5;
-    margin-left: 10px;
-  }
+  text-align: center;
+  visibility: hidden;
+  width: 112px;
+  height: 75px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 4px 0;
+  position: absolute;
+  display: inline;
+  z-index: 5;
+  margin-left: 10px;
+}
 
-  .tooltip:hover .tooltipText {
-    visibility: visible;
-  }
+.tooltip:hover .tooltipText {
+  visibility: visible;
+}
 
 .perm_info {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .guide {
-    top: -70px;
-    position: relative;
+  top: -125px;
+  position: relative;
+}
+
+.state-parent {
+  width: 45%;
+  position: relative;
+  top: -175px;
+  display: flex;
+  justify-content: end;
 }
