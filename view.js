@@ -8,16 +8,24 @@ let permissions_title = document.createElement('b')
 permissions_title.append("Permissions")
 $('#sidepanel').append(permissions_title)
 $('#sidepanel').append(document.createElement('br'))
-$('#sidepanel').append("Select a user below and click a file on the left to check permissions. Another panel can be opened by clicking the 'Create New Panel' Button below. The two panels will be set to the same file, but the user can be changed to compare their permissions.")
+$('#sidepanel').append("Select a user under the panel and click a file on the left to check their permissions. Another panel can be opened by clicking the 'Create New Panel' Button below. The two panels will be set to the same file, but the user can be changed to compare permissions.")
 
 //create new permissions panel button
 let newPermissionsPanelButton = document.createElement('button')
 newPermissionsPanelButton.id = "newPermissionsPanelButton"
 newPermissionsPanelButton.textContent = "Create New Panel"
+$('#sidepanel').append(document.createElement('br'))
 $('#sidepanel').append(newPermissionsPanelButton)
 
-// Add permissions word to button
-$('permbutton').append("File Permissions");
+//create the file selected display
+$('#sidepanel').append(document.createElement('br'))
+$('#sidepanel').append(document.createElement('br'))
+let file_selected_display = document.createElement('input')
+file_selected_display.placeholder = "Select a File"
+file_selected_display.disabled = true;
+file_selected_display.id = "file_selected";
+file_selected_display.style = "width:100%"
+$('#sidepanel').append(file_selected_display)
 
 //add panel, set attributes, and add user select button
 function createNewPermissionsPanel() {
@@ -26,7 +34,7 @@ function createNewPermissionsPanel() {
     $('#sidepanel').append(panel)
 
     let new_user = define_new_user_select_field("new_user", "Select User", function (selected_user) {
-        $('#panel').attr('username', selected_user)
+        $('#panel' + panelCount).attr('username', selected_user)
     })
     $('#sidepanel').append(new_user)
 
@@ -73,19 +81,30 @@ function createNewPermissionsPanel() {
 $('#newPermissionsPanelButton').click(function () {
     createNewPermissionsPanel()
 })
+//create the display for the selected file
+$('#sidepanel').append(document.createElement('br'))
+$('#sidepanel').append(document.createElement('br'))
 //initialize the first panel
 createNewPermissionsPanel()
 
-//click on a file to set the filepath for the panels
-$(document).on('click', '.file', function () {
+//click on a file or folder to set the filepath for the panels
+$(document).on('click', '.fileSelect', function () {
     //get filepath by removing the _div from the id
     let filepath = $(this).attr('id').slice(0, -4);
+    //set textbox
+    $("#file_selected").val(filepath)
+
     console.log(filepath)
     for (let i = 0; i < panelCount; ++i) {
         //set each panel's filepath
         $('#panel' + panelCount).attr('filepath', filepath)
     }
 });
+
+
+
+
+
 
 
 // ---- Display file structure ----
@@ -98,7 +117,7 @@ function make_file_element(file_obj) {
         let folder_elem = $(`<div class='folder' id="${file_hash}_div">
             <h3 id="${file_hash}_header">
                 <span class="oi oi-folder" id="${file_hash}_icon"/> 
-                <div class="tooltip">
+                <div class="tooltip fileSelect" id = "${file_hash}_sel">
                 ${file_obj.filename} 
                 <span class="fileName tooltipText"></span>
              </div>
@@ -123,7 +142,7 @@ function make_file_element(file_obj) {
         return folder_elem
     }
     else {
-        return $(`<div class='file'  id="${file_hash}_div">
+        return $(`<div class='file fileSelect'  id="${file_hash}_div">
             <span class="oi oi-file" id="${file_hash}_icon"/>
             <div class="tooltip">
              ${file_obj.filename}
@@ -148,7 +167,7 @@ for (let root_file of root_files) {
 
 // make folder hierarchy into an accordion structure
 $('.folder').accordion({
-    collapsible: true,
+    collapsible: false,
     heightStyle: 'content'
 }) // TODO: start collapsed and check whether read permission exists before expanding?
 
@@ -216,6 +235,10 @@ confirmDialog.dialog({
         }
     }
 });
+
+// Add permissions word to button
+$('.permbutton').append("File Permissions");
+//^^^ try doing this wherever the button is actually created instead of appending it -AR
 
 
 
