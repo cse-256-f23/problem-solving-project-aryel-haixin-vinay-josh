@@ -381,6 +381,7 @@ function toggle_permission(
   is_allow = null
 ) {
   // Sanity check - the file object and user exist.
+  console.log("bruhhh");
   if (!from_undo) {
     if (!(filepath in path_to_file) || !(username in all_users)) return false;
   }
