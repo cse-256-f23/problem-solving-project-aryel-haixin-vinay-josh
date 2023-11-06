@@ -2,6 +2,8 @@
 
 //count for the number of panels, so that the ids are different
 let panelCount = 0;
+//selected file
+let file_selected = "";
 
 //create heading and instructions
 let permissions_title = document.createElement('b')
@@ -32,11 +34,16 @@ function createNewPermissionsPanel() {
     panelCount++;
     let panel = define_new_effective_permissions("panel" + panelCount, true, null)
     $('#sidepanel').append(panel)
-
-    let new_user = define_new_user_select_field("new_user", "Select User", function (selected_user) {
-        $('#panel' + panelCount).attr('username', selected_user)
+    let currCount = panelCount;
+    let new_user = define_new_user_select_field("new_user" + panelCount, "Select User", function (selected_user) {
+        $('#panel' + currCount).attr('username', selected_user)
     })
     $('#sidepanel').append(new_user)
+
+    //if a file is already selected
+    if(file_selected != ""){
+        $('#panel' + panelCount).attr('filepath', file_selected)
+    }
 
     let new_dialog = define_new_dialog('new_dialog', '')
 
@@ -93,11 +100,12 @@ $(document).on('click', '.fileSelect', function () {
     let filepath = $(this).attr('id').slice(0, -4);
     //set textbox
     $("#file_selected").val(filepath)
+    file_selected = filepath;
 
     console.log(filepath)
-    for (let i = 0; i < panelCount; ++i) {
+    for (let i = 1; i < panelCount+1; ++i) {
         //set each panel's filepath
-        $('#panel' + panelCount).attr('filepath', filepath)
+        $('#panel' + i).attr('filepath', filepath)
     }
 });
 
