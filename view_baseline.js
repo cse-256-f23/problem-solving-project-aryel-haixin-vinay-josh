@@ -11,7 +11,7 @@ perm_dialog = define_new_dialog(
   (options = {
     // The following are standard jquery-ui options. See https://jqueryui.com/dialog/
     height: 500,
-    width: 400,
+    width: 500,
     buttons: {
       OK: {
         text: "OK",
@@ -56,8 +56,11 @@ file_permission_users = define_single_select_list(
     grouped_permissions.attr("username", selected_user);
   }
 );
+
 file_permission_users.css({
-  height: "80px",
+  'max-height': "150px",
+  overflow:"auto",
+  'margin-bottom': "10px",
 });
 
 // Make button to add a new user to the list:
@@ -185,8 +188,8 @@ perm_dialog.append(
   )
 );
 perm_dialog.append(file_permission_users);
-perm_dialog.append(perm_add_user_select);
-perm_add_user_select.append(perm_remove_user_button); // Cheating a bit again - add the remove button the the 'add user select' div, just so it shows up on the same line.
+// perm_dialog.append(perm_add_user_select);
+// perm_add_user_select.append(perm_remove_user_button); // Cheating a bit again - add the remove button the the 'add user select' div, just so it shows up on the same line.
 perm_dialog.append(grouped_permissions);
 perm_dialog.append(advanced_expl_div);
 
@@ -202,8 +205,8 @@ define_attribute_observer(perm_dialog, "filepath", function () {
   file_users = get_file_users(path_to_file[current_filepath]);
   file_user_list = make_user_list(
     "permdialog_file_user",
-    file_users,
-    (add_attributes = true)
+    all_users,
+    // (add_attributes = true)
   );
   grouped_permissions.attr("username", ""); // since we are reloading the user list, reset the username in permission checkboxes
   //replace previous user list with the one we just generated:
