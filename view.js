@@ -82,11 +82,29 @@ $(".reset-button").on("click", function () {
 
 //create heading and instructions
 let permissions_title = document.createElement("b");
-permissions_title.append("Effective Permissions");
+permissions_title.append("View Final Permissions for a Given User and File");
 $("#sidepanel").append(permissions_title);
 $("#sidepanel").append(document.createElement("br"));
+let instructionsList = document.createElement("ul");
+let inst1 = document.createElement("li")
+let inst2 = document.createElement("li")
+let inst3 = document.createElement("li")
+let inst4 = document.createElement("li")
+let inst4Text = document.createElement("i")
+inst4.append(inst4Text)
+
+instructionsList.append(inst1)
+instructionsList.append(inst2)
+instructionsList.append(inst3)
+instructionsList.append(inst4)
+
+inst1.innerHTML = "Select a file on the left by clicking it"
+inst2.innerHTML = "Select a user from the dropdown above the panel"
+inst3.innerHTML = "Change the file's permissions by clicking on the 'Edit Permissions' button"
+inst4Text.innerHTML = "Optional: Click the 'Create New Panel' Button below to open another panel for comparison. The two panels will be set to the same file, but the user can be changed individually"
+
 $("#sidepanel").append(
-  "Select a user under the panel and click a file on the left to check their permissions. Another panel can be opened by clicking the 'Create New Panel' Button below. The two panels will be set to the same file, but the user can be changed to compare permissions."
+  instructionsList
 );
 
 //create new permissions panel button
@@ -126,16 +144,21 @@ function createNewPermissionsPanel() {
     true,
     null
   );
-  $("#sidepanel").append(panel);
   let currCount = panelCount;
   let new_user = define_new_user_select_field(
     "new_user" + panelCount,
-    "Select User",
+    "Change User",
     function (selected_user) {
       $("#panel" + currCount).attr("username", selected_user);
     }
   );
+  let panelTitle = document.createElement("b")
+  panelTitle.innerHTML = "Panel "+ panelCount
+  $("#sidepanel").append(document.createElement("br"))
+  $("#sidepanel").append(panelTitle)
   $("#sidepanel").append(new_user);
+  $("#sidepanel").append(panel);
+  
 
   //if a file is already selected
   if (file_selected != "") {

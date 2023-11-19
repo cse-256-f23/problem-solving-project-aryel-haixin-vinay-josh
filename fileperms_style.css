@@ -84,3 +84,8 @@ input[type="checkbox"]:hover {
   display: flex;
   justify-content: end;
 }
+
+ul{
+  position:relative;
+  left: 25px;
+}
