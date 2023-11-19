@@ -139,6 +139,13 @@ $("#changePermissionsButton").click(function () {
 //add panel, set attributes, and add user select button
 function createNewPermissionsPanel() {
   panelCount++;
+  //max panel count = 2
+  if(panelCount == 2){
+    $("#newPermissionsPanelButton").remove()
+  }
+  if(panelCount > 2){
+    return
+  }
   let panel = define_new_effective_permissions(
     "panel" + panelCount,
     true,
