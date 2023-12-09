@@ -39,7 +39,7 @@ obj_name_div = $(
 
 //Make the div with the explanation about special permissions/advanced settings:
 advanced_expl_div = $(
-  '<div id="permdialog_advanced_explantion_text">For special permissions or advanced settings, click Advanced.</div>'
+  '<div id="permdialog_advanced_explantion_text">For special permissions or advanced settings, click More.</div>'
 );
 
 // Make the (grouped) permission checkboxes table:
